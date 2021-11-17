@@ -1,0 +1,28 @@
+server:
+  port: 8806
+
+spring:
+  application:
+    name: job-service
+
+#  datasource:
+##    name: cards
+#    driver-class-name: oracle.jdbc.driver.OracleDriver
+#    jdbcUrl: jdbc:oracle:thin:@localhost:1521:ORCLCDB
+#    username: bandeira
+#    password: bandeira
+#    minimum-idle: 5
+#    maximum-pool-size: 15
+#    login-timeout: 10000
+#    idle-timeout: 10000
+#    connection-timeout: 10000
+#    auto-commit: false
+#    initialization-fail-fast: false
+#    pool-name: HikariPool-avenida
+  jpa:
+    database: ORACLE
+    database-platform: org.hibernate.dialect.Oracle10gDialect
+    show_sql: true
+    generate-ddl: false
+    properties:
+      hibernate.hbm2ddl.auto: none
