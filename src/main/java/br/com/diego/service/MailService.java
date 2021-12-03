@@ -13,11 +13,11 @@ public class MailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void enviar(String emissor, String data, String texto) {
+    public void enviar(String assunto, String data, String texto) {
 
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(MailService.emailDestino);
-        email.setSubject("Erro no Job do emissor - "+emissor+" - Data: "+data);
+        email.setSubject(assunto);
         email.setText(texto);
         mailSender.send(email);
 

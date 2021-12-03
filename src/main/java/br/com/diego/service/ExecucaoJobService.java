@@ -42,7 +42,9 @@ public class ExecucaoJobService {
         List<ExecucaoJob> jobs = new ArrayList<>();
 
         if (emissores != null && !emissores.isEmpty()){
-            log.info("Tem emissores quantidade: "+emissores.size());
+
+            log.info("Existem emissores cadastrados. Quantidade: "+emissores.size());
+            log.info("Início da monitoria... ");
 
             for (Emissor e: emissores){
                 OracleConnect oracleConnect = new OracleConnect();
@@ -55,7 +57,7 @@ public class ExecucaoJobService {
                     Statement statement = co.createStatement();
                     ResultSet rs = statement.executeQuery(sql);
 
-                    //Imprime o resultado na tabela
+                    //Coleta os dados da consulta
                     while (rs.next()) {
                         String idexecucaojob = rs.getString("idexecucaojob");
                         String dataexecucao = rs.getString("dataexecucao");
@@ -85,11 +87,13 @@ public class ExecucaoJobService {
                 }
             }
 
+            log.info("Fim da monitoria... ");
+
         }else{
             log.info("Não existe emissores cadastrados!!!");
         }
         if (jobs!=null && !jobs.isEmpty()){
-            mailService.enviar("TESTE", data,
+            mailService.enviar("<<ALERTA DE ERRO EM JOBS>> - Data: "+data, data,
                     "Segue relação de jobs com erro: \n\n"+corpoEmail(jobs));
         }
         historicoMonitoriaService.salvar(tipoOrigem);
