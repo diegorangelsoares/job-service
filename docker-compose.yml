@@ -9,18 +9,16 @@ services:
       dockerfile: Dockerfile
     environment:
       TZ: America/Sao_Paulo
-#      EUREKA.CLIENTE.SERVICEURL.DEFAULTZONE: http://naming-service:8761/eureka
-#      SPRING.ZIPKIN.BASEURL: http://zipkin-server:9411/
-#      RABBIT_URI: anqp://guest:guest@rabbit-mq:5672
-#      SPRING_RABBITMQ_HOST: rabbit-mq
-#      SPRING_ZIPKIN_SENDER_TYPE: rabbit
       SPRING.DATASOURCE.URL: jdbc:postgresql://postgres-job:5432/job-service
       SPRING.DATASOURCE.USERNAME: postgres
       SPRING.DATASOURCE.PASSWORD: postgres
     networks:
-      - api
+      - api-job
     ports:
-      - "8100:8100"
+      - 8889:8889
+      - 5007:5007
+#    extra_hosts:
+#      - "dockerhost:$DOCKERHOST"
 
   postgres-job:
     image: postgres:9.6
@@ -34,10 +32,10 @@ services:
     volumes:
       - ./docker/postgres/cardsapi:/var/lib/postgresql/data
     networks:
-      - api
+      - api-job
     ports:
       - "5433:5432"
 
 networks:
-  api:
+  api-job:
     driver: bridge

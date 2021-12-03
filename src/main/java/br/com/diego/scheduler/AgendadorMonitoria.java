@@ -32,8 +32,8 @@ public class AgendadorMonitoria {
     //1000 é 1segundo
     @Scheduled(fixedDelay = 30000)
     public void verificaPorHora() {
-        log.info("Verificando scheduler...");
-        if (AgendadorMonitoria.CONTINUA_VERIFICANDO = true){
+        log.info("Scheduler em execução...");
+        if (AgendadorMonitoria.CONTINUA_VERIFICANDO == true){
             List<HistoricoMonitoria> historicos = new ArrayList<>();
             SimpleDateFormat out = new SimpleDateFormat("dd/MM/yy");
             String dataString = out.format(new Date());
