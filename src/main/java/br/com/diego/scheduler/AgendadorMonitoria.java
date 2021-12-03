@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,7 +32,7 @@ public class AgendadorMonitoria {
 
     //1000 é 1segundo
     @Scheduled(fixedDelay = 30000)
-    public void verificaPorHora() {
+    public void verificaPorHora() throws IOException {
         log.info("Scheduler em execução...");
         if (AgendadorMonitoria.CONTINUA_VERIFICANDO == true){
             List<HistoricoMonitoria> historicos = new ArrayList<>();

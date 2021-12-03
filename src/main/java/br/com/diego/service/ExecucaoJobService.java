@@ -3,13 +3,13 @@ package br.com.diego.service;
 import br.com.diego.model.Emissor;
 import br.com.diego.model.ExecucaoJob;
 import br.com.diego.repository.OracleConnect;
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,7 +35,7 @@ public class ExecucaoJobService {
     @Autowired
     HistoricoMonitoriaService historicoMonitoriaService;
 
-    public List<ExecucaoJob> retornaJobsErros (String data, boolean isCobranca, String tipoOrigem){
+    public List<ExecucaoJob> retornaJobsErros (String data, boolean isCobranca, String tipoOrigem) throws IOException {
 
         List<Emissor> emissores = emissorService.retornaEmissores();
 
@@ -68,6 +68,7 @@ public class ExecucaoJobService {
                         ExecucaoJob execucaoJob = new ExecucaoJob();
                         //execucaoJob.setDataexecucao(dataexecucao);
                         execucaoJob.setDescricao(descricao);
+                        execucaoJob.setNomejob(nomejob);
                         execucaoJob.setEmissor(e.getNome());
                         if (isCobranca){
                             if (execucaoJob.listaNomesJobsCobranca().contains(descricao)){
@@ -93,8 +94,8 @@ public class ExecucaoJobService {
             log.info("Não existe emissores cadastrados!!!");
         }
         if (jobs!=null && !jobs.isEmpty()){
-            mailService.enviar("<<ALERTA DE ERRO EM JOBS>> - Data: "+data, data,
-                    "Segue relação de jobs com erro: \n\n"+corpoEmail(jobs));
+            mailService.sendMail("<<ALERTA DE ERRO EM JOBS>> - Data: "+data, data,
+                    "Segue relação de jobs com erro: \n\n"+corpoEmail(jobs), GerarTextoDoArquivo(jobs));
         }
         historicoMonitoriaService.salvar(tipoOrigem);
         return jobs;
@@ -102,6 +103,15 @@ public class ExecucaoJobService {
     }
 
     public String corpoEmail(List<ExecucaoJob> jobs){
+        String corpo = "Opa,\n\n" +
+                "Tivemos alguns erros de Jobs nos emissores abaixo:\n\n";
+        for (ExecucaoJob job: jobs){
+            corpo = corpo + "Emissor: "+job.getEmissor()+" - NomeJob: "+job.getNomejob()+"\n";
+        }
+        return corpo;
+    }
+
+    public String GerarTextoDoArquivo(List<ExecucaoJob> jobs){
         String corpo = "";
         for (ExecucaoJob job: jobs){
             corpo = corpo + "Erro de job do emissor: "+job.getEmissor()+"\n"+ job.toString() + "\n\n";

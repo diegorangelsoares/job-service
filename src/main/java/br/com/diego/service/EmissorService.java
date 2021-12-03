@@ -22,8 +22,7 @@ public class EmissorService {
     EmissorRepository emissorRepository;
 
     public List<Emissor> retornaEmissores (){
-        return emissorRepository.findAll();
-        //return emissorRepository.findByMonitorar("S");
+        return emissorRepository.findAllByMonitorar("S");
     }
 
 

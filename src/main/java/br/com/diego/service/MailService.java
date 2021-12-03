@@ -1,10 +1,21 @@
 package br.com.diego.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+
+@Slf4j
 @Service
 public class MailService {
 
@@ -13,7 +24,10 @@ public class MailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void enviar(String assunto, String data, String texto) {
+    @Autowired
+    FileService fileService;
+
+    public void enviarSimples(String assunto, String data, String texto) {
 
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(MailService.emailDestino);
@@ -21,6 +35,45 @@ public class MailService {
         email.setText(texto);
         mailSender.send(email);
 
+    }
+
+    public void sendMail(String assunto, String data, String texto, String textoAnexo) throws IOException {
+
+        String nomeArquivo = "";
+
+        if (!"".equals(textoAnexo)){
+            nomeArquivo = fileService.gerarArquivo(textoAnexo);
+        }
+
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+
+        MimeMessageHelper helper;
+
+        try {
+            helper = new MimeMessageHelper(mimeMessage, true);
+            helper.setFrom(MailService.emailDestino, "Monitoria Job");
+            helper.setTo(MailService.emailDestino);
+            helper.setSentDate(new Date());
+            helper.setText(texto, false);
+            helper.setSubject(assunto);
+
+            if (!nomeArquivo.equals("")) {
+
+                File attach = new File(nomeArquivo);
+                helper.addAttachment(nomeArquivo, attach);
+
+            }
+
+            mailSender.send(mimeMessage);
+
+            log.info("Envio com Sucesso!");
+        } catch (MailException e) {
+            log.error("Email não pode ser eviado!\n" + e.getMessage());
+        } catch (MessagingException e) {
+            log.error("Email não pode ser eviado.\n" + e.getMessage());
+        } catch (IOException e) {
+            log.error("Anexo não encontrado\n" + e.getMessage());
+        }
     }
 
 }

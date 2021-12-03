@@ -1,0 +1,8 @@
+Segue relação de jobs com erro: 
+
+Opa,
+
+Tivemos alguns erros de Jobs nos emissores abaixo:
+
+Emissor: CARTAOLOPES - NomeJob: com.neus.cards.business.job.RotinaDiariaCancelarFaturaDigitalEmailJob
+Emissor: VOX - NomeJob: com.neus.cards.business.job.RotinaDiariaCancelamentoCartaoVencidoJob
