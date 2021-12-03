@@ -1,0 +1,38 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:9.6
+    container_name: postgres
+    hostname: postgres
+    environment:
+      POSTGRES_DB: "cardsapi"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      TZ: "GMT"
+    volumes:
+      - ./docker/postgres/cardsapi:/var/lib/postgresql/data
+    networks:
+      - api
+    ports:
+      - "5433:5432"
+
+  spring-boot:
+    image: imagem-spring-boot
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spring-boot-api-2
+    command: mvn spring-boot:run -f /pom.xml -DskipTests -Dspring-boot.run.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
+    volumes:
+      - /:/api
+    expose:
+      - 5000
+    restart: always
+#    depends_on:
+#      - db
+    networks:
+      - api
+
+networks:
+  api:
+    driver: bridge
