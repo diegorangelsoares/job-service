@@ -1,8 +1,30 @@
 version: '3'
 services:
-  postgres:
+  job-service:
+    image: rangeldiego/job-service
+    container_name: 'job-service'
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      TZ: America/Sao_Paulo
+#      EUREKA.CLIENTE.SERVICEURL.DEFAULTZONE: http://naming-service:8761/eureka
+#      SPRING.ZIPKIN.BASEURL: http://zipkin-server:9411/
+#      RABBIT_URI: anqp://guest:guest@rabbit-mq:5672
+#      SPRING_RABBITMQ_HOST: rabbit-mq
+#      SPRING_ZIPKIN_SENDER_TYPE: rabbit
+      SPRING.DATASOURCE.URL: jdbc:postgresql://postgres-job:5432/job-service
+      SPRING.DATASOURCE.USERNAME: postgres
+      SPRING.DATASOURCE.PASSWORD: postgres
+    networks:
+      - api
+    ports:
+      - "8100:8100"
+
+  postgres-job:
     image: postgres:9.6
-    container_name: postgres
+    container_name: postgres-job
     hostname: postgres
     environment:
       POSTGRES_DB: "cardsapi"
@@ -15,23 +37,6 @@ services:
       - api
     ports:
       - "5433:5432"
-
-  spring-boot:
-    image: imagem-spring-boot
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: spring-boot-api-2
-    command: mvn spring-boot:run -f /pom.xml -DskipTests -Dspring-boot.run.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
-    volumes:
-      - /:/api
-    expose:
-      - 5000
-    restart: always
-#    depends_on:
-#      - db
-    networks:
-      - api
 
 networks:
   api:
