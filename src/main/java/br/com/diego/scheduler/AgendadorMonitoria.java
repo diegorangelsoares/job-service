@@ -44,6 +44,7 @@ public class AgendadorMonitoria {
             }else{
                 //executar a monitoria
                 execucaoJobService.retornaJobsErros(dataString, false, HistoricoMonitoria.MONITORIA_AUTOMATICA);
+                execucaoJobService.retornaJobsErros(dataString, true, HistoricoMonitoria.MONITORIA_AUTOMATICA);
                 CONTINUA_VERIFICANDO = false;
             }
         }

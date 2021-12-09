@@ -52,7 +52,6 @@ public class ExecucaoJobService {
                 try {
 
                     String sql = "Select * from t_execucaojob  where STATUS = 'E' and dataexecucao > to_date('"+data+"','DD/MM/YY') and dataexecucao-1 < to_date('"+data+"','DD/MM/YY')";
-                    //log.info("SQL: "+sql);
                     Connection co = oracleConnect.conectarBanco( OracleConnect.PORTA_ORACLE, e.getUsuario(), e.getSenha(), e.getCaminho(),e.getServico());
                     Statement statement = co.createStatement();
                     ResultSet rs = statement.executeQuery(sql);
@@ -94,8 +93,23 @@ public class ExecucaoJobService {
             log.info("Não existe emissores cadastrados!!!");
         }
         if (jobs!=null && !jobs.isEmpty()){
-            mailService.sendMail("<<ALERTA DE ERRO EM JOBS>> - Data: "+data, data,
-                    "Segue relação de jobs com erro: \n\n"+corpoEmail(jobs), GerarTextoDoArquivo(jobs));
+            String assunto = "";
+            if (isCobranca){
+                assunto = "<<ALERTA DE ERRO EM JOBS DE COBRANÇA>> - Data: "+data;
+            }else{
+                assunto = "<<ALERTA DE ERRO EM JOBS>> - Data: "+data;
+            }
+            mailService.sendMail(assunto, data,
+                    "Segue relação de jobs com erro: \n\n"+corpoEmail(jobs), GerarTextoDoArquivo(jobs), isCobranca);
+        }else{
+            String assunto = "";
+            if (isCobranca){
+                assunto = "<<ALERTA JOBS DE COBRANÇA>> SEM ERROS NA DATA: "+data;
+            }else{
+                assunto = "<<ALERTA JOBS>> SEM ERROS NA DATA: "+data;
+            }
+            mailService.sendMail(assunto, data,
+                    "Não houve erro nos jobs na data: "+data, "", isCobranca);
         }
         historicoMonitoriaService.salvar(tipoOrigem);
         return jobs;

@@ -20,6 +20,8 @@ services:
     ports:
       - 8889:8889
       - 5007:5007
+    depends_on:
+      - postgres-job
 #    extra_hosts:
 #      - "dockerhost:$DOCKERHOST"
 

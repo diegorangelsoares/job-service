@@ -1,8 +1,30 @@
-Segue relação de jobs com erro: 
+Erro de job do emissor: CARTAOLOPES
+ExecucaoJob(idexecucaojob=null, dataexecucao=null, descricao=com.neus.util.excecao.repositorio.ErroLogicoException: Host não adicionado
+Senha não adicionada
+Usuário não adicionado
 
-Opa,
+	at com.neus.cards.business.parametros.ColecaoParametro.validarSMTPRotinasProcessamentoGerais(ColecaoParametro.java:329)
+	at com.neus.cards.business.parametros.ColecaoParametro.getConfigAcessoSMTPRotinasProcessamentoGerais(ColecaoParametro.java:285)
+	at com.neus.cards.business.faturamento.ColecaoFaturaDigital.processarRotinaCancelamentoFaturaDigitalEmail(ColecaoFaturaDigital.java:436)
+	at com.neus.cards.business.faturamento.ColecaoFaturaDigital.processarRotinaCancelamentoFaturaDigitalEmail(ColecaoFaturaDigital.java:408)
+	at com.neus.cards.business.job.RotinaDiariaCancelarFaturaDigitalEmailJob.doExecute(RotinaDiariaCancelarFaturaDigitalEmailJob.java:29)
+	at com.neus.cards.business.job.CardsJob.execute(CardsJob.java:305)
+	at com.neus.cards.business.job.RotinaDiariaCardsJob.doExecute(RotinaDiariaCardsJob.java:401)
+	at com.neus.cards.business.job.CardsJob.execute(CardsJob.java:305)
+	at org.quartz.core.JobRunShell.run(JobRunShell.java:213)
+	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:557)
+, status=null, nomejob=com.neus.cards.business.job.RotinaDiariaCancelarFaturaDigitalEmailJob, version=null, emissor=CARTAOLOPES)
 
-Tivemos alguns erros de Jobs nos emissores abaixo:
+Erro de job do emissor: VOX
+ExecucaoJob(idexecucaojob=null, dataexecucao=null, descricao=com.neus.util.excecao.repositorio.ErroLogicoException: Cliente nao encontrado
+	at com.neus.cards.business.cliente.ColecaoClienteTitularPessoaFisica.getClienteTitularPorCartao(ColecaoClienteTitularPessoaFisica.java:927)
+	at com.neus.cards.business.cartao.ColecaoBloqueioCartao.bloqueioCartoesVencidos(ColecaoBloqueioCartao.java:1414)
+	at com.neus.cards.business.cartao.ColecaoBloqueioCartao.bloqueioCartoesVencidos(ColecaoBloqueioCartao.java:1318)
+	at com.neus.cards.business.job.RotinaDiariaCancelamentoCartaoVencidoJob.doExecute(RotinaDiariaCancelamentoCartaoVencidoJob.java:48)
+	at com.neus.cards.business.job.CardsJob.execute(CardsJob.java:305)
+	at com.neus.cards.business.job.RotinaDiariaCardsJob.doExecute(RotinaDiariaCardsJob.java:401)
+	at com.neus.cards.business.job.CardsJob.execute(CardsJob.java:305)
+	at org.quartz.core.JobRunShell.run(JobRunShell.java:213)
+	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:557)
+, status=null, nomejob=com.neus.cards.business.job.RotinaDiariaCancelamentoCartaoVencidoJob, version=null, emissor=VOX)
 
-Emissor: CARTAOLOPES - NomeJob: com.neus.cards.business.job.RotinaDiariaCancelarFaturaDigitalEmailJob
-Emissor: VOX - NomeJob: com.neus.cards.business.job.RotinaDiariaCancelamentoCartaoVencidoJob

@@ -1,5 +1,6 @@
 package br.com.diego.service;
 
+import br.com.diego.model.Config;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -27,6 +28,9 @@ public class MailService {
     @Autowired
     FileService fileService;
 
+    @Autowired
+    ConfigService configService;
+
     public void enviarSimples(String assunto, String data, String texto) {
 
         SimpleMailMessage email = new SimpleMailMessage();
@@ -37,7 +41,19 @@ public class MailService {
 
     }
 
-    public void sendMail(String assunto, String data, String texto, String textoAnexo) throws IOException {
+    public void sendMail(String assunto, String data, String texto, String textoAnexo, boolean isCobranca) throws IOException {
+
+        String emailDestino = "";
+
+        if (isCobranca){
+            emailDestino = configService.returnValue(Config.CONFIG_NAME_EMAIL_COBRANCA);
+        }else{
+            emailDestino = configService.returnValue(Config.CONFIG_NAME_EMAIL_CORE);
+        }
+
+        if (emailDestino.equals("")){
+            emailDestino = MailService.emailDestino;
+        }
 
         String nomeArquivo = "";
 
@@ -52,7 +68,7 @@ public class MailService {
         try {
             helper = new MimeMessageHelper(mimeMessage, true);
             helper.setFrom(MailService.emailDestino, "Monitoria Job");
-            helper.setTo(MailService.emailDestino);
+            helper.setTo(emailDestino);
             helper.setSentDate(new Date());
             helper.setText(texto, false);
             helper.setSubject(assunto);
