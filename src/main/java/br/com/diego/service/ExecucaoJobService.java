@@ -70,7 +70,7 @@ public class ExecucaoJobService {
                         execucaoJob.setNomejob(nomejob);
                         execucaoJob.setEmissor(e.getNome());
                         if (isCobranca){
-                            if (execucaoJob.listaNomesJobsCobranca().contains(descricao)){
+                            if (execucaoJob.listaNomesJobsCobranca().contains(nomejob)){
                                 jobs.add(execucaoJob);
                             }
                         }else{
