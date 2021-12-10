@@ -29,4 +29,9 @@ public class HistoricoMonitoriaService{
         return historicoMonitoriaRepository.findAllByAndOrigemMonitoriaAndAndDataMonitoria(tipoOrigem, data);
     }
 
+    public void removeHistoricoPorData(String data){
+        historicoMonitoriaRepository.deleteAllByDataMonitoria(data);
+    }
+
+
 }

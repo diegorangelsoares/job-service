@@ -11,4 +11,6 @@ import java.util.List;
 public interface HistoricoMonitoriaRepository extends JpaRepository<HistoricoMonitoria, Long> {
 
     List<HistoricoMonitoria> findAllByAndOrigemMonitoriaAndAndDataMonitoria(String tipoOrigem, String data);
+
+    void deleteAllByDataMonitoria(String dataMonitoria);
 }

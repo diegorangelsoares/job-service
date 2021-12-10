@@ -74,7 +74,9 @@ public class ExecucaoJobService {
                                 jobs.add(execucaoJob);
                             }
                         }else{
-                            jobs.add(execucaoJob);
+                            if (!execucaoJob.listaNomesJobsCobranca().contains(nomejob)){
+                                jobs.add(execucaoJob);
+                            }
                         }
 
                     }
@@ -111,7 +113,6 @@ public class ExecucaoJobService {
             mailService.sendMail(assunto, data,
                     "Não houve erro nos jobs na data: "+data, "", isCobranca);
         }
-        historicoMonitoriaService.salvar(tipoOrigem);
         return jobs;
 
     }

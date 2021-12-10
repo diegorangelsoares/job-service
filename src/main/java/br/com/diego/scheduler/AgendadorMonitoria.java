@@ -20,9 +20,9 @@ import java.util.List;
 @Slf4j
 public class AgendadorMonitoria {
 
-    private static boolean CONTINUA_VERIFICANDO = true;
+    public static boolean CONTINUA_VERIFICANDO = true;
 
-    private static boolean VERIFICAO_INICIADA = false;
+    public static boolean VERIFICAO_INICIADA = false;
 
     @Autowired
     HistoricoMonitoriaService historicoMonitoriaService;
@@ -45,6 +45,7 @@ public class AgendadorMonitoria {
                 //executar a monitoria
                 execucaoJobService.retornaJobsErros(dataString, false, HistoricoMonitoria.MONITORIA_AUTOMATICA);
                 execucaoJobService.retornaJobsErros(dataString, true, HistoricoMonitoria.MONITORIA_AUTOMATICA);
+                historicoMonitoriaService.salvar(HistoricoMonitoria.MONITORIA_AUTOMATICA);
                 CONTINUA_VERIFICANDO = false;
             }
         }
