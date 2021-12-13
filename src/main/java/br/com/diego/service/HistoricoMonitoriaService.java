@@ -5,7 +5,6 @@ import br.com.diego.repository.HistoricoMonitoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.management.MonitorInfo;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +29,8 @@ public class HistoricoMonitoriaService{
     }
 
     public void removeHistoricoPorData(String data){
-        historicoMonitoriaRepository.deleteAllByDataMonitoria(data);
+        //historicoMonitoriaRepository.deleteAllByDataMonitoria(data);
+        historicoMonitoriaRepository.deleteAll();
     }
 
 
