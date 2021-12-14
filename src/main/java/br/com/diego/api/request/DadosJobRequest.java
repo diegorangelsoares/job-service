@@ -1,4 +1,4 @@
-package br.com.diego.request;
+package br.com.diego.api.request;
 
 import lombok.Getter;
 import lombok.Setter;

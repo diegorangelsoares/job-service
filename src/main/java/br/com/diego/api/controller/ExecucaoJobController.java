@@ -1,9 +1,10 @@
-package br.com.diego.controller;
+package br.com.diego.api.controller;
 
+import br.com.diego.api.response.EmissorResponse;
 import br.com.diego.model.ExecucaoJob;
 import br.com.diego.model.HistoricoMonitoria;
-import br.com.diego.request.DadosJobRequest;
 import br.com.diego.scheduler.AgendadorMonitoria;
+import br.com.diego.service.EmissorService;
 import br.com.diego.service.ExecucaoJobService;
 import br.com.diego.service.HistoricoMonitoriaService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@Tag(name = "Service endpoint")
+@Tag(name = "Jobs")
 @RequestMapping("job-service")
 @Slf4j
 public class ExecucaoJobController {
@@ -29,6 +29,8 @@ public class ExecucaoJobController {
 
     @Autowired
     HistoricoMonitoriaService historicoMonitoriaService;
+
+    SimpleDateFormat out = new SimpleDateFormat("dd/MM/yy");
 
     @GetMapping(value = "/findJobsToDate/")
     public ResponseEntity<?> findJobsToDate(@RequestParam String data) throws Exception {
@@ -42,8 +44,6 @@ public class ExecucaoJobController {
 
     @GetMapping(value = "/findJobsToday/")
     public ResponseEntity<?> findJobsToday() throws Exception {
-
-        SimpleDateFormat out = new SimpleDateFormat("dd/MM/yy");
 
         String result = out.format(new Date());
 
@@ -59,15 +59,11 @@ public class ExecucaoJobController {
         log.info("Buscando erros de jobs com a data: "+data);
         List<ExecucaoJob> jobs = execucaoJobService.retornaJobsErros(data, true, HistoricoMonitoria.MONITORIA_MANUAL);
 
-
         return ResponseEntity.status(HttpStatus.OK).body(jobs);
     }
 
     @GetMapping(value = "/findJobsTodayCobranca/")
     public ResponseEntity<?> findJobsTodayCobranca() throws Exception {
-
-
-        SimpleDateFormat out = new SimpleDateFormat("dd/MM/yy");
 
         String result = out.format(new Date());
 
@@ -81,9 +77,6 @@ public class ExecucaoJobController {
     @PostMapping(value = "/ForcarNewAutomatic/")
     public ResponseEntity<?> ForcarNewAutomatic() throws Exception {
 
-
-        SimpleDateFormat out = new SimpleDateFormat("dd/MM/yy");
-
         String result = out.format(new Date());
 
         log.info("Resetando busca automatica na data: "+result);
@@ -94,5 +87,7 @@ public class ExecucaoJobController {
 
         return ResponseEntity.status(HttpStatus.OK).body("Verificação será iniciada novamente!");
     }
+
+
 
 }
