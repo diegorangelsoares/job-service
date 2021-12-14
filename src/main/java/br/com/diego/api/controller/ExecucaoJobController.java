@@ -1,10 +1,8 @@
 package br.com.diego.api.controller;
 
-import br.com.diego.api.response.EmissorResponse;
 import br.com.diego.model.ExecucaoJob;
 import br.com.diego.model.HistoricoMonitoria;
 import br.com.diego.scheduler.AgendadorMonitoria;
-import br.com.diego.service.EmissorService;
 import br.com.diego.service.ExecucaoJobService;
 import br.com.diego.service.HistoricoMonitoriaService;
 import io.swagger.v3.oas.annotations.tags.Tag;
