@@ -93,6 +93,14 @@ public class ExecucaoJobService {
         return corpo;
     }
 
+    public boolean testeComunicacaoDB() throws IOException {
+        List<Emissor> emissors = emissorService.retornaEmissores();
+        if (emissors != null && !emissors.isEmpty()){
+            return execucaoJobRepository.testeComunicacao(emissors.get(0));
+        }
+        return false;
+    }
+
 
 
 }

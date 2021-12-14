@@ -67,4 +67,23 @@ public class ExecucaoJobRepository {
         return jobs;
     }
 
+    public boolean testeComunicacao (Emissor emissor) throws IOException {
+
+        try {
+
+            String sql = "Select 1 from dual";
+            Connection co = oracleConnect.conectarBanco( OracleConnect.PORTA_ORACLE, emissor.getUsuario(), emissor.getSenha(), emissor.getCaminho(),emissor.getServico());
+            Statement statement = co.createStatement();
+            statement.executeQuery(sql);
+
+            log.info("Comunicação realizada com Sucesso!");
+            co.close();
+            return true;
+
+        }catch(SQLException ex){ //trata os erros SQL
+            log.error("Erro na comunicação com o banco Oracle - "+ex.getMessage());
+            return false;
+        }
+    }
+
 }
