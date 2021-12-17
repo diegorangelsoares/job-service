@@ -88,7 +88,7 @@ public class ExecucaoJobService {
     public String GerarTextoDoArquivo(List<ExecucaoJob> jobs){
         String corpo = "";
         for (ExecucaoJob job: jobs){
-            corpo = corpo + "Erro de job do emissor: "+job.getEmissor()+"\n"+ job.toString() + "\n\n";
+            corpo = corpo + "Erro de job do emissor: "+job.getEmissor()+"\n"+ job.ToString() + "\n\n";
         }
         return corpo;
     }

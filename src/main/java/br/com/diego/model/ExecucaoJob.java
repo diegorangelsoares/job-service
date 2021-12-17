@@ -1,6 +1,7 @@
 package br.com.diego.model;
 
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -147,6 +148,11 @@ public class ExecucaoJob {
 
       return jobs;
 
+    }
+
+    @Autowired
+    public String ToString(){
+        return "Nome Job: "+this.nomejob+"\nDescrição do erro: "+this.descricao;
     }
 
 }
