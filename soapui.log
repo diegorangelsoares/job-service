@@ -1,0 +1,8 @@
+2021-12-13 10:04:09,432 INFO  [DefaultSoapUICore] initialized soapui-settings from [/home/local/CONDUCTOR/diego.freire/Documentos/SoupUi/soapui-3.5.1-linux-bin/soapui-3.5.1/soapui-settings.xml]
+2021-12-13 10:04:09,788 INFO  [SoapUI] Used java version: 11.0.13
+2021-12-13 10:04:52,490 INFO  [WsdlProject] Loaded project from [file:/home/local/CONDUCTOR/diego.freire/Documentos/projetos_diego/projetoSoap/CARDS-soapui-project.xml]
+2021-12-13 10:04:53,070 INFO  [WorkspaceImpl] Saved workspace to [/home/local/CONDUCTOR/diego.freire/Documentos/projetos_diego/job-service/../../TestPBE-workspace.xml]
+2021-12-13 10:13:20,186 INFO  [SaveXmlTextAreaAction] XML written to [/home/local/CONDUCTOR/diego.freire/Documentos/projetos_diego/projetoSoap/CARDS-soapui-project-HML.xml]
+2021-12-13 12:34:35,036 INFO  [DefaultSoapUICore] Settings saved to [/home/local/CONDUCTOR/diego.freire/Documentos/SoupUi/soapui-3.5.1-linux-bin/soapui-3.5.1/soapui-settings.xml]
+2021-12-13 12:34:35,142 INFO  [WsdlProject] Saved project [CARDS_Diego] to [/home/local/CONDUCTOR/diego.freire/Documentos/projetos_diego/projetoSoap/CARDS-soapui-project.xml - 819487 bytes
+2021-12-13 12:34:35,143 INFO  [WorkspaceImpl] Saved workspace to [/home/local/CONDUCTOR/diego.freire/Documentos/projetos_diego/job-service/../../TestPBE-workspace.xml]
