@@ -32,6 +32,7 @@ public class ExecucaoJob {
     public static String ProcessarIntegracaoSeguradoraJob = "ProcessarIntegracaoSeguradoraJob";
     public static String CorteConvenioJobJPA = "CorteConvenioJobJPA";
     public static String CorteAdicionalJob = "CorteAdicionalJob";
+    public static String BloqueioContasAtrasoJob = "BloqueioContasAtrasoJob";
     public static String BloqueiaClienteCarnePorAtrasoJob = "BloqueiaClienteCarnePorAtrasoJob";
     public static String EnviarClientesParaCobrancaJob = "EnviarClientesParaCobrancaJob";
     public static String EnviarContasCobrancaJob = "EnviarContasCobrancaJob";
@@ -145,6 +146,7 @@ public class ExecucaoJob {
         jobs.add(ExecucaoJob.ProcessarArquivoPagamentosRealizadosEasyCollectorJob);
         jobs.add(ExecucaoJob.EnviarInadimplentesCobransaasJob);
         jobs.add(ExecucaoJob.EnviarCreliqCobransaasJob);
+        jobs.add(ExecucaoJob.BloqueioContasAtrasoJob);
 
       return jobs;
 
