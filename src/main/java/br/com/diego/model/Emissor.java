@@ -25,5 +25,6 @@ public class Emissor {
     private String servico;
 
     private String monitorar;
+    private String porta;
 
 }
