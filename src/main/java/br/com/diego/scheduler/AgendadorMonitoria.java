@@ -1,8 +1,10 @@
 package br.com.diego.scheduler;
 
+import br.com.diego.api.response.EmissorResponse;
 import br.com.diego.model.HistoricoMonitoria;
 import br.com.diego.service.ExecucaoJobService;
 import br.com.diego.service.HistoricoMonitoriaService;
+import br.com.diego.service.MailService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.tomcat.jni.Local;
@@ -18,6 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @EnableScheduling
@@ -28,21 +31,27 @@ public class AgendadorMonitoria {
 
     public static boolean VERIFICAO_INICIADA = false;
 
+    public static long QUANTIDADE_VERIFICACAO = 0;
+
+    public static List<String> EMISSORES_COM_ERRO = new ArrayList<>();
+
     @Autowired
     HistoricoMonitoriaService historicoMonitoriaService;
 
     @Autowired
     ExecucaoJobService execucaoJobService;
 
+    @Autowired
+    MailService mailService;
+
     //1000 é 1segundo
     @Scheduled(fixedDelay = 30000)
     public void verificaPorHora() throws IOException {
         log.info("Scheduler em execução...");
+        //log.info("Quantidade de verificações: "+AgendadorMonitoria.QUANTIDADE_VERIFICACAO);
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH");
         int hora = Integer.parseInt(dtf.format(LocalDateTime.now()));
-
-
 
         //Iniciar verificações apenas após as 6 horas da manhã
         if (hora > 5) {
@@ -97,6 +106,20 @@ public class AgendadorMonitoria {
                     }
                 }
             }
+        }
+
+        if (EMISSORES_COM_ERRO != null && !EMISSORES_COM_ERRO.isEmpty()){
+            String assunto = "<<EMISSORES QUE NÃO FORAM POSSÍVEIS DE MONITORAR - API-MONITORIA-JOB>>";
+            String corpoEmail = "";
+            AgendadorMonitoria.EMISSORES_COM_ERRO = AgendadorMonitoria.EMISSORES_COM_ERRO.stream().distinct().collect(Collectors.toList());
+            for (String e: EMISSORES_COM_ERRO){
+                corpoEmail = corpoEmail + e + "\n";
+            }
+            mailService.sendMail(assunto, "",
+                    "Segue relação de emissores que nao foi possivel monitorar os jobs: \n\n"+corpoEmail, "", true);
+
+            //Enviar email com emissores que deram problema na consulta e zerar a lista
+            EMISSORES_COM_ERRO = new ArrayList<>();
         }
     }
 

@@ -4,6 +4,7 @@ import br.com.diego.model.Emissor;
 import br.com.diego.model.ExecucaoJob;
 import br.com.diego.repository.ExecucaoJobRepository;
 import br.com.diego.repository.OracleConnect;
+import br.com.diego.scheduler.AgendadorMonitoria;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -95,6 +96,7 @@ public class ExecucaoJobService {
 
     public boolean testeComunicacaoDB() throws IOException {
         List<Emissor> emissors = emissorService.retornaEmissores();
+        AgendadorMonitoria.QUANTIDADE_VERIFICACAO++;
         if (emissors != null && !emissors.isEmpty()){
             return execucaoJobRepository.testeComunicacao(emissors.get(0));
         }

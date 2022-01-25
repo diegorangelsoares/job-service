@@ -1,7 +1,9 @@
 package br.com.diego.repository;
 
+import br.com.diego.api.response.EmissorResponse;
 import br.com.diego.model.Emissor;
 import br.com.diego.model.ExecucaoJob;
+import br.com.diego.scheduler.AgendadorMonitoria;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -28,40 +30,44 @@ public class ExecucaoJobRepository {
 
         try {
 
-            String sql = "Select * from t_execucaojob  where STATUS = 'E' and dataexecucao > to_date('"+data+"','DD/MM/YY') and dataexecucao-1 < to_date('"+data+"','DD/MM/YY')";
-            Connection co = oracleConnect.conectarBanco( OracleConnect.PORTA_ORACLE, emissor.getUsuario(), emissor.getSenha(), emissor.getCaminho(),emissor.getServico());
-            Statement statement = co.createStatement();
-            ResultSet rs = statement.executeQuery(sql);
+            String sql = "Select * from t_execucaojob  where STATUS = 'E' and dataexecucao > to_date('" + data + "','DD/MM/YY') and dataexecucao-1 < to_date('" + data + "','DD/MM/YY')";
+            Connection co = oracleConnect.conectarBanco(OracleConnect.PORTA_ORACLE, emissor.getUsuario(), emissor.getSenha(), emissor.getCaminho(), emissor.getServico());
+            if (co == null) {
+                AgendadorMonitoria.EMISSORES_COM_ERRO.add(emissor.getNome());
+            }else{
+                Statement statement = co.createStatement();
+                ResultSet rs = statement.executeQuery(sql);
 
-            //Coleta os dados da consulta
-            while (rs.next()) {
-                String descricao = rs.getString("DESCRICAO");
-                String nomejob = rs.getString("nomejob");
-                if (!"".equals(nomejob)){
-                    nomejob = nomejob.replace("com.neus.cards.business.job.","");
-                }
-
-                ExecucaoJob execucaoJob = new ExecucaoJob();
-                //execucaoJob.setDataexecucao(dataexecucao);
-                execucaoJob.setDescricao(descricao);
-                execucaoJob.setNomejob(nomejob);
-                execucaoJob.setEmissor(emissor.getNome());
-                if (isCobranca){
-                    if (execucaoJob.listaNomesJobsCobranca().contains(nomejob)){
-                        jobs.add(execucaoJob);
+                //Coleta os dados da consulta
+                while (rs.next()) {
+                    String descricao = rs.getString("DESCRICAO");
+                    String nomejob = rs.getString("nomejob");
+                    if (!"".equals(nomejob)) {
+                        nomejob = nomejob.replace("com.neus.cards.business.job.", "");
                     }
-                }else{
-                    if (!execucaoJob.listaNomesJobsCobranca().contains(nomejob)){
-                        jobs.add(execucaoJob);
-                    }
-                }
 
+                    ExecucaoJob execucaoJob = new ExecucaoJob();
+                    //execucaoJob.setDataexecucao(dataexecucao);
+                    execucaoJob.setDescricao(descricao);
+                    execucaoJob.setNomejob(nomejob);
+                    execucaoJob.setEmissor(emissor.getNome());
+                    if (isCobranca) {
+                        if (execucaoJob.listaNomesJobsCobranca().contains(nomejob)) {
+                            jobs.add(execucaoJob);
+                        }
+                    } else {
+                        if (!execucaoJob.listaNomesJobsCobranca().contains(nomejob)) {
+                            jobs.add(execucaoJob);
+                        }
+                    }
+
+                }
+                log.info("Quantidade registros no emissor: " + emissor.getNome() + " é: " + jobs.size());
+                co.close();
             }
-            log.info("Quantidade registros no emissor: "+emissor.getNome()+" é: "+jobs.size());
-            co.close();
 
         }catch(SQLException ex){ //trata os erros SQL
-            log.error("Erro na consulta dos dados - "+ex.getMessage());
+            log.error("Erro na consulta dos dados no emissor "+emissor.getNome()+" - "+ex.getMessage());
             return null;
         }
         return jobs;
@@ -81,7 +87,8 @@ public class ExecucaoJobRepository {
             return true;
 
         }catch(SQLException ex){ //trata os erros SQL
-            log.error("Erro na comunicação com o banco Oracle - "+ex.getMessage());
+            log.error("Erro na comunicação com o banco Oracle do emissor "+emissor.getNome()+" - "+ex.getMessage());
+            AgendadorMonitoria.EMISSORES_COM_ERRO.add(emissor.getNome());
             return false;
         }
     }
