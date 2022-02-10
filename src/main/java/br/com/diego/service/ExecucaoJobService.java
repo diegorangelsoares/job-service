@@ -80,8 +80,10 @@ public class ExecucaoJobService {
     public String corpoEmail(List<ExecucaoJob> jobs){
         String corpo = "Opa,\n\n" +
                 "Tivemos alguns erros de Jobs nos emissores abaixo:\n\n";
-        for (ExecucaoJob job: jobs){
-            corpo = corpo + "Emissor: "+job.getEmissor()+" - NomeJob: "+job.getNomejob()+"\n";
+        if (jobs != null && !jobs.isEmpty()) {
+            for (ExecucaoJob job : jobs) {
+                corpo = corpo + "Emissor: " + job.getEmissor() + " - NomeJob: " + job.getNomejob() + "\n";
+            }
         }
         return corpo;
     }

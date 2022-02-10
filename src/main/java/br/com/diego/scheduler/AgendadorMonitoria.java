@@ -15,8 +15,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -29,11 +27,13 @@ public class AgendadorMonitoria {
 
     public static boolean CONTINUA_VERIFICANDO = true;
 
-    public static boolean VERIFICAO_INICIADA = false;
-
     public static long QUANTIDADE_VERIFICACAO = 0;
 
     public static List<String> EMISSORES_COM_ERRO = new ArrayList<>();
+
+    public static String dataUltimaVerificacao = "";
+
+    SimpleDateFormat out = new SimpleDateFormat("dd/MM/yy");
 
     @Autowired
     HistoricoMonitoriaService historicoMonitoriaService;
@@ -48,18 +48,24 @@ public class AgendadorMonitoria {
     @Scheduled(fixedDelay = 30000)
     public void verificaPorHora() throws IOException {
         log.info("Scheduler em execução...");
-        //log.info("Quantidade de verificações: "+AgendadorMonitoria.QUANTIDADE_VERIFICACAO);
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH");
         int hora = Integer.parseInt(dtf.format(LocalDateTime.now()));
 
+        String dataString = out.format(new Date());
+
+        //Verificar se a ultima varredura foi do dia anterior
+        if (!dataString.equals(dataUltimaVerificacao)){
+            AgendadorMonitoria.CONTINUA_VERIFICANDO = true;
+        }
+
         //Iniciar verificações apenas após as 6 horas da manhã
+        //Horário que certamente os jobs de todos os emissores terminaram de serem executados
         if (hora > 5) {
             if (AgendadorMonitoria.CONTINUA_VERIFICANDO == true) {
 
                 List<HistoricoMonitoria> historicos = new ArrayList<>();
-                SimpleDateFormat out = new SimpleDateFormat("dd/MM/yy");
-                String dataString = out.format(new Date());
+
                 historicos = historicoMonitoriaService.buscarMonitorias(dataString, "A");
                 if (historicos != null && !historicos.isEmpty()) {
                     CONTINUA_VERIFICANDO = false;
@@ -103,6 +109,8 @@ public class AgendadorMonitoria {
                             CONTINUA_VERIFICANDO = false;
                         }
 
+                        dataUltimaVerificacao = dataString;
+
                     }
                 }
             }
@@ -115,7 +123,8 @@ public class AgendadorMonitoria {
             for (String e: EMISSORES_COM_ERRO){
                 corpoEmail = corpoEmail + e + "\n";
             }
-            mailService.sendMail(assunto, "",
+            mailService.sendMail(assunto,
+                    "",
                     "Segue relação de emissores que nao foi possivel monitorar os jobs: \n\n"+corpoEmail, "", true);
 
             //Enviar email com emissores que deram problema na consulta e zerar a lista
