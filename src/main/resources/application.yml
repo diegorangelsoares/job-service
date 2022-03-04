@@ -1,5 +1,7 @@
 server:
-  port: 8806
+  port: 8888
+
+  #brain.connect@dock.tech
 
 spring:
   application:
@@ -22,8 +24,8 @@ spring:
     host: smtp.gmail.com
     port: 587
     protocol: smtp
-    username: diegorangeljpa@gmail.com
-    password: 123456
+    username: monitoriabrain@gmail.com
+    password: ftqbtoxmemfqrqdm
     properties:
       mail:
         smtp:
@@ -32,30 +34,3 @@ spring:
             enable: true
             required: true
           quitwait: false
-
-
-#spring:
-#  application:
-#    name: job-service
-#
-#  datasource:
-#    name: cardsprivate
-#    driverClassName: oracle.jdbc.driver.OracleDriver
-#    jdbcUrl: jdbc:oracle:thin:@localhost:1521:ORCLCDB
-#    username: bandeira
-#    password: bandeira
-#    minimum-idle: 5
-#    maximum-pool-size: 15
-#    login-timeout: 10000
-#    idle-timeout: 10000
-#    connection-timeout: 10000
-#    auto-commit: false
-#    initialization-fail-fast: false
-#    pool-name: HikariPool-avenida
-#  jpa:
-#    database: ORACLE
-#    database-platform: org.hibernate.dialect.Oracle10gDialect
-#    show_sql: true
-#    generate-ddl: false
-#    properties:
-#      hibernate.hbm2ddl.auto: none
